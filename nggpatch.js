@@ -1,162 +1,218 @@
-var _0xcb3a = ["undefined", "href", "src", "currentScript", "main", "byteLength", "buffer", "memory", "utf-8", "encodeInto", "function", "encode", "set", "length", "subarray", "charCodeAt", "slice", "written", "decode", "apply_patch", "instantiateStreaming", "Content-Type", "get", "headers", "application/wasm", "`WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n", "warn", "arrayBuffer", "instantiate", "Instance", "wbg", "exports", "__wbindgen_wasm_module", "Module", "_bg.wasm", "replace", "string", "assign"];
+// Deobfuscated and renamed variables for clarity
+
 let wasm_bindgen;
 (function () {
-  const _0x8280x2 = {};
-  let _0x8280x3;
-  if (typeof document === _0xcb3a[0]) {
-    _0x8280x3 = location[_0xcb3a[1]];
+  // Helper constants (string keys used in obfuscated code)
+  const STR_UNDEFINED = "undefined";
+  const STR_HREF = "href";
+  const STR_SRC = "src";
+  const STR_CURRENT_SCRIPT = "currentScript";
+  const STR_MAIN = "main";
+  const STR_BYTELENGTH = "byteLength";
+  const STR_BUFFER = "buffer";
+  const STR_MEMORY = "memory";
+  const STR_UTF8 = "utf-8";
+  const STR_ENCODEINTO = "encodeInto";
+  const STR_FUNCTION = "function";
+  const STR_ENCODE = "encode";
+  const STR_SET = "set";
+  const STR_LENGTH = "length";
+  const STR_SUBARRAY = "subarray";
+  const STR_CHARCODEAT = "charCodeAt";
+  const STR_SLICE = "slice";
+  const STR_WRITTEN = "written";
+  const STR_DECODE = "decode";
+  const STR_APPLY_PATCH = "apply_patch";
+  const STR_INSTANTIATE_STREAMING = "instantiateStreaming";
+  const STR_CONTENT_TYPE = "Content-Type";
+  const STR_GET = "get";
+  const STR_HEADERS = "headers";
+  const STR_APPLICATION_WASM = "application/wasm";
+  const STR_WASM_STREAMING_FALLBACK = "`WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n";
+  const STR_WARN = "warn";
+  const STR_ARRAYBUFFER = "arrayBuffer";
+  const STR_INSTANTIATE = "instantiate";
+  const STR_INSTANCE = "Instance";
+  const STR_WBG = "wbg";
+  const STR_EXPORTS = "exports";
+  const STR_WASM_MODULE = "__wbindgen_wasm_module";
+  const STR_MODULE = "Module";
+  const STR_BG_WASM = "_bg.wasm";
+  const STR_REPLACE = "replace";
+  const STR_STRING = "string";
+  const STR_ASSIGN = "assign";
+  
+  // API object
+  const api = {};
+  let wasmInstance;
+  let scriptPath;
+  
+  // Determine current script path or location
+  if (typeof document === STR_UNDEFINED) {
+    scriptPath = location[STR_HREF];
   } else {
-    _0x8280x3 = new URL(document[_0xcb3a[3]][_0xcb3a[2]], location[_0xcb3a[1]]).toString();
+    scriptPath = new URL(document[STR_CURRENT_SCRIPT][STR_SRC], location[STR_HREF]).toString();
   }
-  ;
-  let _0x8280x4;
-  _0x8280x2[_0xcb3a[4]] = function () {
-    _0x8280x4[_0xcb3a[4]]();
+
+  let wasmModule;
+  
+  // Entrypoint for module (main)
+  api[STR_MAIN] = function () {
+    wasmModule[STR_MAIN]();
   };
-  let _0x8280x5 = 0;
-  let _0x8280x6 = null;
-  function _0x8280x7() {
-    if (_0x8280x6 === null || _0x8280x6[_0xcb3a[5]] === 0) {
-      _0x8280x6 = new Uint8Array(_0x8280x4[_0xcb3a[7]][_0xcb3a[6]]);
+
+  let lastEncodedLength = 0;
+  let cachedUint8Memory = null;
+
+  // Get cached Uint8Array for wasm memory
+  function getUint8Memory() {
+    if (cachedUint8Memory === null || cachedUint8Memory[STR_BYTELENGTH] === 0) {
+      cachedUint8Memory = new Uint8Array(wasmModule[STR_MEMORY][STR_BUFFER]);
     }
-    ;
-    return _0x8280x6;
+    return cachedUint8Memory;
   }
-  const _0x8280x8 = new TextEncoder(_0xcb3a[8]);
-  const _0x8280x9 = typeof _0x8280x8[_0xcb3a[9]] === _0xcb3a[10] ? function (_0x8280xa, _0x8280xb) {
-    return _0x8280x8[_0xcb3a[9]](_0x8280xa, _0x8280xb);
-  } : function (_0x8280xa, _0x8280xb) {
-    const _0x8280xc = _0x8280x8[_0xcb3a[11]](_0x8280xa);
-    _0x8280xb[_0xcb3a[12]](_0x8280xc);
-    return {
-      read: _0x8280xa[_0xcb3a[13]],
-      written: _0x8280xc[_0xcb3a[13]]
+
+  // Text encoder
+  const encoder = new TextEncoder(STR_UTF8);
+
+  // Encoding function (adapts to browser support)
+  const encodeString = typeof encoder[STR_ENCODEINTO] === STR_FUNCTION ?
+    function (str, view) {
+      return encoder[STR_ENCODEINTO](str, view);
+    } :
+    function (str, view) {
+      const buf = encoder[STR_ENCODE](str);
+      view[STR_SET](buf);
+      return { read: str[STR_LENGTH], written: buf[STR_LENGTH] };
     };
-  };
-  function _0x8280xd(_0x8280xa, _0x8280xe, _0x8280xf) {
-    if (_0x8280xf === undefined) {
-      const _0x8280xc = _0x8280x8[_0xcb3a[11]](_0x8280xa);
-      const _0x8280x10 = _0x8280xe(_0x8280xc[_0xcb3a[13]]);
-      _0x8280x7()[_0xcb3a[14]](_0x8280x10, _0x8280x10 + _0x8280xc[_0xcb3a[13]])[_0xcb3a[12]](_0x8280xc);
-      _0x8280x5 = _0x8280xc[_0xcb3a[13]];
-      return _0x8280x10;
+
+  // Helper for passing strings to WASM
+  function passStringToWasm(str, malloc, realloc) {
+    if (realloc === undefined) {
+      const buf = encoder[STR_ENCODE](str);
+      const ptr = malloc(buf[STR_LENGTH]);
+      getUint8Memory()[STR_SUBARRAY](ptr, ptr + buf[STR_LENGTH])[STR_SET](buf);
+      lastEncodedLength = buf[STR_LENGTH];
+      return ptr;
     }
-    ;
-    let _0x8280x11 = _0x8280xa[_0xcb3a[13]];
-    let _0x8280x10 = _0x8280xe(_0x8280x11);
-    const _0x8280x12 = _0x8280x7();
-    let _0x8280x13 = 0;
-    for (; _0x8280x13 < _0x8280x11; _0x8280x13++) {
-      const _0x8280x14 = _0x8280xa[_0xcb3a[15]](_0x8280x13);
-      if (_0x8280x14 > 0x7F) {
+    let len = str[STR_LENGTH];
+    let ptr = malloc(len);
+    const mem = getUint8Memory();
+    let offset = 0;
+    for (; offset < len; offset++) {
+      const code = str[STR_CHARCODEAT](offset);
+      if (code > 0x7F) {
         break;
       }
-      ;
-      _0x8280x12[_0x8280x10 + _0x8280x13] = _0x8280x14;
+      mem[ptr + offset] = code;
     }
-    ;
-    if (_0x8280x13 !== _0x8280x11) {
-      if (_0x8280x13 !== 0) {
-        _0x8280xa = _0x8280xa[_0xcb3a[16]](_0x8280x13);
+    if (offset !== len) {
+      if (offset !== 0) {
+        str = str[STR_SLICE](offset);
       }
-      ;
-      _0x8280x10 = _0x8280xf(_0x8280x10, _0x8280x11, _0x8280x11 = _0x8280x13 + _0x8280xa[_0xcb3a[13]] * 3);
-      const _0x8280xb = _0x8280x7()[_0xcb3a[14]](_0x8280x10 + _0x8280x13, _0x8280x10 + _0x8280x11);
-      const _0x8280x15 = _0x8280x9(_0x8280xa, _0x8280xb);
-      _0x8280x13 += _0x8280x15[_0xcb3a[17]];
+      ptr = realloc(ptr, len, len = offset + str[STR_LENGTH] * 3);
+      const view = getUint8Memory()[STR_SUBARRAY](ptr + offset, ptr + len);
+      const result = encodeString(str, view);
+      offset += result[STR_WRITTEN];
     }
-    ;
-    _0x8280x5 = _0x8280x13;
-    return _0x8280x10;
+    lastEncodedLength = offset;
+    return ptr;
   }
-  let _0x8280x16 = null;
-  function _0x8280x17() {
-    if (_0x8280x16 === null || _0x8280x16[_0xcb3a[5]] === 0) {
-      _0x8280x16 = new Int32Array(_0x8280x4[_0xcb3a[7]][_0xcb3a[6]]);
+
+  let cachedInt32Memory = null;
+
+  // Get cached Int32Array for wasm memory
+  function getInt32Memory() {
+    if (cachedInt32Memory === null || cachedInt32Memory[STR_BYTELENGTH] === 0) {
+      cachedInt32Memory = new Int32Array(wasmModule[STR_MEMORY][STR_BUFFER]);
     }
-    ;
-    return _0x8280x16;
+    return cachedInt32Memory;
   }
-  const _0x8280x18 = new TextDecoder(_0xcb3a[8], {
-    ignoreBOM: true,
-    fatal: true
-  });
-  _0x8280x18[_0xcb3a[18]]();
-  _0x8280x2[_0xcb3a[19]] = function (_0x8280x1a) {
+
+  // Text decoder
+  const decoder = new TextDecoder(STR_UTF8, { ignoreBOM: true, fatal: true });
+  decoder[STR_DECODE]();
+
+  // Example function for decoding WASM output (specifically for an apply_patch export)
+  api[STR_APPLY_PATCH] = function (inputStr) {
     try {
-      const _0x8280x1b = _0x8280x4.__wbindgen_add_to_stack_pointer(-16);
-      const _0x8280x1c = _0x8280xd(_0x8280x1a, _0x8280x4.__wbindgen_malloc, _0x8280x4.__wbindgen_realloc);
-      const _0x8280x1d = _0x8280x5;
-      _0x8280x4[_0xcb3a[19]](_0x8280x1b, _0x8280x1c, _0x8280x1d);
-      var _0x8280x1e = _0x8280x17()[_0x8280x1b / 4 + 0];
-      var _0x8280x1f = _0x8280x17()[_0x8280x1b / 4 + 1];
-      return _0x8280x18[_0xcb3a[18]](_0x8280x7()[_0xcb3a[14]](_0x8280x1e, _0x8280x1e + _0x8280x1f));
+      const stackPointer = wasmModule.__wbindgen_add_to_stack_pointer(-16);
+      const ptr = passStringToWasm(inputStr, wasmModule.__wbindgen_malloc, wasmModule.__wbindgen_realloc);
+      const len = lastEncodedLength;
+      wasmModule[STR_APPLY_PATCH](stackPointer, ptr, len);
+      var resultPtr = getInt32Memory()[stackPointer / 4 + 0];
+      var resultLen = getInt32Memory()[stackPointer / 4 + 1];
+      return decoder[STR_DECODE](getUint8Memory()[STR_SUBARRAY](resultPtr, resultPtr + resultLen));
     } finally {
-      _0x8280x4.__wbindgen_add_to_stack_pointer(16);
-      _0x8280x4.__wbindgen_free(_0x8280x1e, _0x8280x1f);
+      wasmModule.__wbindgen_add_to_stack_pointer(16);
+      wasmModule.__wbindgen_free(resultPtr, resultLen);
     }
   };
-  async function _0x8280x20(_0x8280x21, _0x8280x22) {
-    if (typeof Response === _0xcb3a[10] && _0x8280x21 instanceof Response) {
-      if (typeof WebAssembly[_0xcb3a[20]] === _0xcb3a[10]) {
+
+  // Instantiates a WebAssembly module (with streaming fallback)
+  async function loadWasm(source, imports) {
+    if (typeof Response === STR_FUNCTION && source instanceof Response) {
+      if (typeof WebAssembly[STR_INSTANTIATE_STREAMING] === STR_FUNCTION) {
         try {
-          return await WebAssembly[_0xcb3a[20]](_0x8280x21, _0x8280x22);
+          return await WebAssembly[STR_INSTANTIATE_STREAMING](source, imports);
         } catch (e) {
-          if (_0x8280x21[_0xcb3a[23]][_0xcb3a[22]](_0xcb3a[21]) != _0xcb3a[24]) {
-            console[_0xcb3a[26]](_0xcb3a[25], e);
+          if (source[STR_HEADERS][STR_GET](STR_CONTENT_TYPE) != STR_APPLICATION_WASM) {
+            console[STR_WARN](STR_WASM_STREAMING_FALLBACK, e);
           } else {
             throw e;
           }
         }
       }
-      ;
-      const _0x8280x23 = await _0x8280x21[_0xcb3a[27]]();
-      return await WebAssembly[_0xcb3a[28]](_0x8280x23, _0x8280x22);
+      const arrayBuffer = await source[STR_ARRAYBUFFER]();
+      return await WebAssembly[STR_INSTANTIATE](arrayBuffer, imports);
     } else {
-      const _0x8280x24 = await WebAssembly[_0xcb3a[28]](_0x8280x21, _0x8280x22);
-      if (_0x8280x24 instanceof WebAssembly[_0xcb3a[29]]) {
-        return {
-          instance,
-          module
-        };
+      const result = await WebAssembly[STR_INSTANTIATE](source, imports);
+      if (result instanceof WebAssembly[STR_INSTANCE]) {
+        return { instance, module };
       } else {
-        return _0x8280x24;
+        return result;
       }
     }
   }
-  function _0x8280x25() {
-    const _0x8280x22 = {
-      [_0xcb3a[30]]: {}
-    };
-    return _0x8280x22;
+
+  // Prepares imports object for WASM instantiation (example)
+  function getImports() {
+    const imports = {};
+    imports[STR_WBG] = {};
+    return imports;
   }
-  function _0x8280x26(_0x8280x22, _0x8280x27) {}
-  function _0x8280x28(_0x8280x24, _0x8280x21) {
-    _0x8280x4 = _0x8280x24[_0xcb3a[31]];
-    _0x8280x2a[_0xcb3a[32]] = _0x8280x21;
-    _0x8280x16 = null;
-    _0x8280x6 = null;
-    _0x8280x4.__wbindgen_start();
-    return _0x8280x4;
+
+  // Sets up additional imports (placeholder)
+  function setupImports(imports, module) {}
+
+  // Initializes the WASM instance and module
+  function initExports(resultInstance, resultModule) {
+    wasmModule = resultInstance[STR_EXPORTS];
+    initWasm.__wbindgen_wasm_module = resultModule;
+    cachedInt32Memory = null;
+    cachedUint8Memory = null;
+    wasmModule.__wbindgen_start();
+    return wasmModule;
   }
-  async function _0x8280x2a(_0x8280x2b) {
-    if (typeof _0x8280x2b === _0xcb3a[0]) {
-      _0x8280x2b = _0x8280x3[_0xcb3a[35]](/\.js$/, _0xcb3a[34]);
+
+  // Main WASM initialization function
+  async function initWasm(wasmPath) {
+    if (typeof wasmPath === STR_UNDEFINED) {
+      wasmPath = scriptPath[STR_REPLACE](/\.js$/, STR_BG_WASM);
     }
-    ;
-    const _0x8280x22 = _0x8280x25();
-    if (typeof _0x8280x2b === _0xcb3a[36] || typeof Request === _0xcb3a[10] && _0x8280x2b instanceof Request || typeof URL === _0xcb3a[10] && _0x8280x2b instanceof URL) {
-      _0x8280x2b = fetch(_0x8280x2b);
+    const imports = getImports();
+    if (
+      typeof wasmPath === STR_STRING ||
+      typeof Request === STR_FUNCTION && wasmPath instanceof Request ||
+      typeof URL === STR_FUNCTION && wasmPath instanceof URL
+    ) {
+      wasmPath = fetch(wasmPath);
     }
-    ;
-    _0x8280x26(_0x8280x22);
-    const {
-      instance,
-      module
-    } = await _0x8280x20(await _0x8280x2b, _0x8280x22);
-    return _0x8280x28(instance, module);
+    setupImports(imports);
+    const { instance, module } = await loadWasm(await wasmPath, imports);
+    return initExports(instance, module);
   }
-  wasm_bindgen = Object[_0xcb3a[37]](_0x8280x2a, {
-    initSync
-  }, _0x8280x2);
+
+  // Final API assignment (bind the initialization method and expose API)
+  wasm_bindgen = Object[STR_ASSIGN](initWasm, { initSync: undefined }, api);
 })();
